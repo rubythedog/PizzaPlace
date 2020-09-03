@@ -2,6 +2,11 @@
 @using System.Reflection.Metadata.Ecma335
 @using PizzaPlace.Models
 
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<button class="btn btn-primary" @onclick="@IncrementCount">Click me to increment counter</button>
+
 <!-- Menu -->
 
 <h1>Our selection of pizzas</h1>
@@ -11,22 +16,24 @@
     <div class="row">
         <div class="col">@pizza.Name</div>
         <div class="col">@pizza.Price</div>
-        <div class="col"><img src="@SpicinessImage(pizza.Spiciness)"alt="@pizza.Spiciness" /></div>
-        <div class="col"><button class="btn btn-success"  @onclick="@(() => AddToShoppingCart(pizza))">Add</button></div>
+        <div class="col"><img src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness" width="40"/></div>
+        <div class="col"><button class="btn btn-success" @onclick="@(() => AddToShoppingCart(pizza))">Add</button></div>
+
     </div>
 }
 
 <!-- End menu -->
 
 @code{
-
+    
+    int currentCount = 0;
 
     private State state { get; } = new State()
     {
         menu = new Menu
         {
             available_pizzas = new List<Pizza>
-            {
+        {
                 new Pizza(1, "Pepperoni", 8.99M, Spiciness.Spicy ),
                 new Pizza(2, "Margarita", 7.99M, Spiciness.None ),
                 new Pizza(3, "Diabolo", 9.99M, Spiciness.Hot )
@@ -38,11 +45,21 @@
     {
         return $"images/{spiciness.ToString().ToLower()}.png";
     }
-    
+
 
     private void AddToShoppingCart(Pizza pizza)
     {
         Console.WriteLine($"Added pizza {pizza.Name}");
         state.shoppingCart.Add(pizza.Id);
+    }
+
+    private void TestOfOnClick()
+    {
+        Console.WriteLine($"Clicked button");
+    }
+
+    void IncrementCount()
+    {
+        currentCount++;
     }
 }
