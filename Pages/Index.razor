@@ -1,7 +1,48 @@
 ﻿@page "/"
+@using System.Reflection.Metadata.Ecma335
+@using PizzaPlace.Models
 
-<h1>Hello, world!</h1>
+<!-- Menu -->
 
-Welcome to your new app.
+<h1>Our selection of pizzas</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@foreach (var pizza in state.menu.available_pizzas)
+{
+    <div class="row">
+        <div class="col">@pizza.Name</div>
+        <div class="col">@pizza.Price</div>
+        <div class="col"><img src="@SpicinessImage(pizza.Spiciness)"alt="@pizza.Spiciness" /></div>
+        <div class="col"><button class="btn btn-success"  @onclick="@(() => AddToShoppingCart(pizza))">Add</button></div>
+    </div>
+}
+
+<!-- End menu -->
+
+@code{
+
+
+    private State state { get; } = new State()
+    {
+        menu = new Menu
+        {
+            available_pizzas = new List<Pizza>
+            {
+                new Pizza(1, "Pepperoni", 8.99M, Spiciness.Spicy ),
+                new Pizza(2, "Margarita", 7.99M, Spiciness.None ),
+                new Pizza(3, "Diabolo", 9.99M, Spiciness.Hot )
+            }
+        }
+    };
+
+    private string SpicinessImage(Spiciness spiciness)
+    {
+        return $"images/{spiciness.ToString().ToLower()}.png";
+    }
+    
+
+    private void AddToShoppingCart(Pizza pizza)
+    {
+        Console.WriteLine($"Added pizza {pizza.Name}");
+        state.shoppingCart.Add(pizza.Id);
+    }
+}
