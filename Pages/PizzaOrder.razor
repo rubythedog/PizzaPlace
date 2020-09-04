@@ -1,0 +1,163 @@
+﻿@page "/"
+@using System.Reflection.Metadata.Ecma335
+@using PizzaPlace.Models
+@using PizzaPlace.Extensions
+
+
+
+<!-- Menu -->
+<h1>Our selection of pizzas</h1>
+
+@foreach (var pizza in pizzaPlace_state.menu.available_pizzas)
+{
+    <div class="row">
+        <div class="col">@pizza.Name</div>
+        <div class="col">@pizza.Price</div>
+        <div class="col"><img src="@PizzaPlace_SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness" width="40" /></div>
+        <div class="col"><button class="btn btn-success" @onclick="@(() => PizzaPlace_AddToShoppingCart(pizza))">Add</button></div>
+
+    </div>
+}
+
+<!-- End menu -->
+<!-- Shopping Basket -->
+@if (pizzaPlace_state.shoppingCart.orders.Any())
+{
+    <h1>Your current order</h1>
+
+    @foreach (var (pizza, pos) in pizzaPlace_state.shoppingCart.orders.Select((id, pos) => (pizzaPlace_state.menu.GetPizza(id), pos)))
+    {
+        <div class="row">
+            <div class="col">@pizza.Name</div>
+            <div class="col">@pizza.Price</div>
+            <div class="col"><button class="btn btn-danger" @onclick="@(() => RemoveFromBasket(pos))">Remove</button></div>
+        </div>
+    }
+    <div class="row">
+        <div class="col"> Total:</div><div class="col"> @pizzaPlace_state.TotalPrice() </div>
+        <div class="col"> </div>
+    </div>
+}
+
+<!-- End shopping basket -->
+<!-- Customer entry -->
+<h1>Please enter your details below</h1>
+<fieldset>
+    <p>
+        <label for="name">Name:</label><input id="name" @bind="pizzaPlace_state.shoppingCart.customer.Name" />
+        @{
+            string propName;
+            propName = nameof(Customer.Name);
+        }
+        @if (pizzaPlace_state.shoppingCart.customer.GetErrors(propName).Any())
+        {
+            <ul class="validation-error">
+                @foreach (string error in pizzaPlace_state.shoppingCart.customer.GetErrors(propName))
+                {
+                    <li>@error</li>
+                }
+            </ul>
+            Console.WriteLine($"{propName} has errors");
+
+        }
+    </p>
+    <p>
+        <label for="street">Street:</label><input id="street" @bind="pizzaPlace_state.shoppingCart.customer.Street" />
+        @{ propName = nameof(Customer.Street); }
+        @if (pizzaPlace_state.shoppingCart.customer.GetErrors(propName).Any())
+        {
+            <ul class="validation-error">
+                @foreach (string error in pizzaPlace_state.shoppingCart.customer.GetErrors(propName))
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        }
+    </p>
+    <p>
+        <label for="city">City:</label><input id="city" @bind="pizzaPlace_state.shoppingCart.customer.City" />
+        @{ propName = nameof(Customer.City); }
+        @if (pizzaPlace_state.shoppingCart.customer.GetErrors(propName).Any())
+        {
+            <ul class="validation-error">
+                @foreach (string error in pizzaPlace_state.shoppingCart.customer.GetErrors(propName))
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        }
+    </p>
+
+    <button @onclick="@PlaceOrder">Checkout</button>
+    <p>@pizzaPlace_state.ToJson()</p>
+
+
+</fieldset>
+
+<!-- End customer entry -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+<!-- *************************************************************************************************** -->
+
+@code{
+
+    // ***************************************************************************************************
+    // Properties
+    // ***************************************************************************************************
+
+
+    private State pizzaPlace_state { get; } = new State()
+    {
+        menu = new Menu
+        {
+            available_pizzas = new List<Pizza>
+{
+                new Pizza(1, "Pepperoni", 8.99M, Spiciness.Spicy ),
+                new Pizza(2, "Margarita", 7.99M, Spiciness.None ),
+                new Pizza(3, "Diabolo", 9.99M, Spiciness.Hot )
+            }
+        }
+    };
+
+    // ***************************************************************************************************
+    // Methods
+    // ***************************************************************************************************
+    private string PizzaPlace_SpicinessImage(Spiciness spiciness)
+    {
+        return $"images/{spiciness.ToString().ToLower()}.png";
+    }
+
+
+    // ***************************************************************************************************
+    //EventHandlers
+    // ***************************************************************************************************
+  
+
+    private void PizzaPlace_AddToShoppingCart(Pizza pizza)
+    {
+        Console.WriteLine($"Added pizza {pizza.Name}");
+        pizzaPlace_state.shoppingCart.Add(pizza.Id);
+    }
+
+    private void RemoveFromBasket(int pos)
+    {
+        Console.WriteLine($"Removing pizza at pos {pos}");
+        pizzaPlace_state.shoppingCart.RemoveAt(pos);
+    }
+
+
+    private void PlaceOrder()
+    {
+        Console.WriteLine("Placing order");
+    }
+
+}

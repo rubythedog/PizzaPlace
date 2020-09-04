@@ -12,5 +12,10 @@ namespace PizzaPlace.Models
         public ShoppingCart shoppingCart { get; set; } = new ShoppingCart();
 
         public UI_Preferences ui_preferences { get; set; } = new UI_Preferences();
+
+        public decimal TotalPrice()
+        {
+            return shoppingCart.orders.Sum(id => menu.GetPizza(id).Price);
+        }
     }
 }

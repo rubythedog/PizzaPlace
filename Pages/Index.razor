@@ -1,65 +1,13 @@
-﻿@page "/"
-@using System.Reflection.Metadata.Ecma335
-@using PizzaPlace.Models
+﻿@page "/index"
+@inject NavigationManager NavManager
 
-<h1>Counter</h1>
+<h1>Redirect Page</h1>
 
-<p>Current count: @currentCount</p>
-<button class="btn btn-primary" @onclick="@IncrementCount">Click me to increment counter</button>
+<p>Redirecting to Default Page</p>
 
-<!-- Menu -->
-
-<h1>Our selection of pizzas</h1>
-
-@foreach (var pizza in state.menu.available_pizzas)
-{
-    <div class="row">
-        <div class="col">@pizza.Name</div>
-        <div class="col">@pizza.Price</div>
-        <div class="col"><img src="@SpicinessImage(pizza.Spiciness)" alt="@pizza.Spiciness" width="40"/></div>
-        <div class="col"><button class="btn btn-success" @onclick="@(() => AddToShoppingCart(pizza))">Add</button></div>
-
-    </div>
-}
-
-<!-- End menu -->
-
-@code{
-    
-    int currentCount = 0;
-
-    private State state { get; } = new State()
+@code {
+    protected override void OnInitialized()
     {
-        menu = new Menu
-        {
-            available_pizzas = new List<Pizza>
-        {
-                new Pizza(1, "Pepperoni", 8.99M, Spiciness.Spicy ),
-                new Pizza(2, "Margarita", 7.99M, Spiciness.None ),
-                new Pizza(3, "Diabolo", 9.99M, Spiciness.Hot )
-            }
-        }
-    };
-
-    private string SpicinessImage(Spiciness spiciness)
-    {
-        return $"images/{spiciness.ToString().ToLower()}.png";
-    }
-
-
-    private void AddToShoppingCart(Pizza pizza)
-    {
-        Console.WriteLine($"Added pizza {pizza.Name}");
-        state.shoppingCart.Add(pizza.Id);
-    }
-
-    private void TestOfOnClick()
-    {
-        Console.WriteLine($"Clicked button");
-    }
-
-    void IncrementCount()
-    {
-        currentCount++;
+        NavManager.NavigateTo("/pizzaorder");
     }
 }

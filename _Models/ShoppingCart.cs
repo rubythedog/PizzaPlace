@@ -17,5 +17,10 @@ namespace PizzaPlace.Models
         {
             orders.Add(pizzaId);
         }
+
+        public void RemoveAt(int index)
+        {
+            orders.RemoveAt(index);
+        }
     }
 }
