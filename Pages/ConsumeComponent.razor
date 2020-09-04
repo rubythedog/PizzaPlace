@@ -1,0 +1,46 @@
+﻿@page "/component_example"
+@*https://stackoverflow.com/questions/59729898/how-to-bind-and-run-an-async-method-on-input-change-in-blazor*@
+
+<!-- Counter Test -->
+<h1>Consume Component</h1>
+
+<label>Show Child Content (with checkbox)?? </label>
+<input type="checkbox" value="@checkboxIsChecked" @onchange="@CheckBoxChanged" />
+<p>CheckBox value is: @checkboxIsChecked</p>
+
+<label>Show Child Content (with select list)?? </label>
+<select class="form-control selectpicker" value="@selectControlField" @onchange="@SelectListChanged">
+    <option value=-1>--select--</option>
+    <option value=1>Yes</option> // Blazor needs to know what values it binds to!
+    <option value=0>No</option> // Blazor needs to know what values it binds to!
+</select>
+
+<p>Drop down value selected is: @selectControlField</p>
+
+<p></p>
+<ComponentExample Parameter_To_Component="value passed in" ShouldShowChildContent="@checkboxIsChecked">
+    <p>This content will be rendered by the component as 'child content'</p>
+    <strong>Blazor is soo cool!</strong>
+
+</ComponentExample>
+
+@code
+{
+    bool checkboxIsChecked = true;
+    int selectControlField;
+
+    private void CheckBoxChanged(ChangeEventArgs args)
+    {
+
+        checkboxIsChecked = ((bool)args.Value);
+
+        selectControlField = checkboxIsChecked ? 1 : 0;
+    }
+
+    private void SelectListChanged(ChangeEventArgs args)
+    {
+        selectControlField = Convert.ToInt32(args.Value);
+
+        checkboxIsChecked = (selectControlField == 1) ? true : false;
+    }
+}
