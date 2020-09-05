@@ -1,0 +1,31 @@
+﻿@page "/component_templated"
+@*https://stackoverflow.com/questions/59729898/how-to-bind-and-run-an-async-method-on-input-change-in-blazor*@
+
+<!-- Counter Test -->
+<h1>Consume Component (Templates)</h1>
+
+<p></p>
+<Component_Templates>
+
+    <Header>
+        <th>Date</th>
+        <th>Temp (Celcius)</th>
+        <th>Summary</th>
+    </Header>
+    <TableRow>
+        <!-- by default called context-->
+        <td>@DateTime.Now</td>
+        <td>20</td>
+        <td>Sunny</td>
+
+    </TableRow>
+    <Footer>
+        <td colspan="3">Spring is in the air!</td>
+    </Footer>
+
+</Component_Templates>
+
+@code {
+
+}
+
