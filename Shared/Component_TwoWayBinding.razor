@@ -1,16 +1,29 @@
 ﻿<div class="alert alert-secondary mt-4" role="alert">
     <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
 
-    <p>You passed in: '@ParameterToPassIn'</p>
-    
+    <p>You passed in: '@OneWayParameter'</p>
+
+    <p><label>Two Way Parameter To Change:</label><input @bind="TwoWayParameter" /><button @onclick=@UpdateTwoWayParameter>Update</button></p>
 
 </div>
 
-@code {
+@code 
+{
     // Demonstrates how a parent component can supply parameters
     [Parameter]
-    public string ParameterToPassIn { get; set; }
-
+    public string OneWayParameter { get; set; }
    
+    [Parameter]
+    public string TwoWayParameter { get; set; }
+
+
+    [Parameter]
+    public EventCallback<string> TwoWayParameterChanged { get; set; }
+
+    async Task UpdateTwoWayParameter()
+    {
+        await TwoWayParameterChanged.InvokeAsync(TwoWayParameter);
+    }
+
 }
 

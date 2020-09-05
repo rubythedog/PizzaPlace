@@ -5,12 +5,15 @@
 <h1>Consume Component (Two Way Binding)</h1>
 
 <p></p>
-<Component_TwoWayBinding ParameterToPassIn="value passed in" >
-    
-
+<Component_TwoWayBinding OneWayParameter="One Way Value" @bind-TwoWayParameter="ParentVariable">
 </Component_TwoWayBinding>
 
-@code
-{
-   
+<p>Two Way Variable Value Is: '@ParentVariable'</p>
+
+
+@code {
+
+    private string ParentVariable = "Initial Two Way Value";
+
 }
+
